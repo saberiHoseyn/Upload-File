@@ -24,23 +24,20 @@ form.addEventListener("submit" , function(event){
         formdata.append("File" , file);
 
 
-        let ajax = new XMLHttpRequest();
-        ajax.upload.addEventListener("progress" , progressHandler);
-        ajax.addEventListener("load" , completeHandler);
+        //Make XMLHttpRequests by package "axios"
+        //The post axios returns a promise in follow-up
+        axios.post("https://jsonplaceholder.typicode.com/users1",// the server URL of the post request 
+                    JSON.stringify(formdata),//the data of request "post"
+                    {onUploadProgress : progressHandler})//the native progress event calls function "progressHandler"
+                    .then(response=> console.log(response))//getting the response
+                    .catch(error=> console.log(error));//getting the error
 
-
-        ajax.open("POST" , "https://jsonplaceholder.typicode.com/users");
-        ajax.setRequestHeader("content-type" , "aplication/json; charset=UTF-8");
-        ajax.send(JSON.stringify(formdata));
     }
 
+    
     function progressHandler(event) {
         let percent = Math.round((event.loaded / event.total)*100);
         progressBar.style.width = `${percent}%`;
         progressBar.innerHTML = `${percent}%`;
-    }
-
-    function completeHandler(){
-        console.log("complited");
     }
 }); 
